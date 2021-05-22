@@ -8,24 +8,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-@SuppressWarnings("serial")
 public class Main extends JPanel implements ActionListener {
     Timer timer;
 
     private static int maxWidth = 300;
     private static int maxHeight = 200;
 
-    private double angle = 0;
     private double dx = 5;
     private double tx = 0;
     private double dy = 0;
     private double ty = 0;
 
-    private double centerX = maxWidth / 2;
-    private double centerY = 50;
+    private double axAngle = 0;
+
 
     public void actionPerformed(ActionEvent e) {
-        angle -= 0.1;
         if ( tx < -maxWidth/3 ) {
             tx = - maxWidth/3;
             dx = 0;
@@ -45,13 +42,13 @@ public class Main extends JPanel implements ActionListener {
         }
         tx += dx;
         ty += dy;
-        centerX += dx;
-        centerY += dy;
+
+        axAngle -= 0.03;
         repaint();
     }
 
     public Main() {
-        timer = new Timer(90, this);
+        timer = new Timer(10, this);
         timer.start();
     }
 
@@ -84,12 +81,16 @@ public class Main extends JPanel implements ActionListener {
         }
         core.closePath();
 
-        g2d.rotate(angle, centerX, centerY);
         g2d.translate(tx, ty);
+
+        double axX = core.getBounds2D().getMinX();
+        double axY = core.getBounds2D().getMinY();
+        g2d.rotate(axAngle, axX, axY);
+
 
         g2d.setColor(new Color(0, 179, 52));
         g2d.fillRoundRect(maxWidth / 2 - 7, 300, 15, 400, 20, 5);
-        GradientPaint gp = new GradientPaint(0, 3, Color.GREEN, 10, 40, Color.BLUE, true);
+        GradientPaint gp = new GradientPaint(0, 3, Color.GREEN, 10, 40, Color.YELLOW, true);
         g2d.setPaint(gp);
         g2d.fill(core);
 
